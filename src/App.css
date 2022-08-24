@@ -1,18 +1,10 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400&display=swap');
 body {
   margin: 0;
   background-color: rgb(138, 93, 184);
-  font-family: 'Roboto Mono', monospace;
+  font-family: 'Roboto', Arial !important;
   
 }
-.App button {
-  height: 100%;
-}
-
 .App {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
   padding: 1rem;
   margin-top: 5rem;
   background-color: white;
