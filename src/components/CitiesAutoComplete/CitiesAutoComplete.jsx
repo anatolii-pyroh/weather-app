@@ -1,41 +1,18 @@
-import React, { useState } from "react";
+import React from "react";
 import { AsyncPaginate } from "react-select-async-paginate";
-import { geoApiOptions } from "../../api/api";
+import { loadOptions } from "../../api/api";
 
 const CitiesAutoComplete = ({ onSearchChange }) => {
-  const [search, setSearch] = useState("");
-
-  const loadOptions = (inputValue) => {
-    return fetch(
-      `${
-        import.meta.env.VITE_GEO_API_URL
-      }/cities?minPopulation=200000&namePrefix=${inputValue}`,
-      geoApiOptions
-    )
-      .then((response) => response.json())
-      .then((response) => {
-        return {
-          options: response.data.map((city) => {
-            return {
-              value: `${city?.name}, ${city?.countryCode}`,
-              label: `${city?.name}, ${city?.countryCode}`,
-            };
-          }),
-        };
-      })
-      .catch((err) => console.error(err));
-  };
-
+  // sending info to App.js after selecting a city from list
   const handleOnChange = (searchData) => {
-    setSearch(searchData);
     onSearchChange(searchData);
   };
   return (
     <div>
       <AsyncPaginate
-        placeholder='Search for city'
+        placeholder='Search for city...'
         debounceTimeout={500}
-        value={search}
+        value={""}
         onChange={handleOnChange}
         loadOptions={loadOptions}
       />
