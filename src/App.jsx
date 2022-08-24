@@ -5,25 +5,20 @@ import { Container, Box, TextField, Button } from "@mui/material";
 import CitiesAutoComplete from "./components/CitiesAutoComplete/CitiesAutoComplete";
 
 function App() {
-  // const [weatherData, setWeatherData] = useState();
-  // const [inputValue, setInputValue] = useState("");
-
-  // const getApi = async (event) => {
-  //   event.preventDefault();
-  //   if (inputValue.trim().length > 3) {
-  //     const request = await axios.get(
-  //       `${import.meta.env.VITE_WEATHER_API_BASIC_URL}?q=${inputValue}&units=metric&appid=${
-  //         import.meta.env.VITE_WEATHER_API_KEY
-  //       }`
-  //     );
-  //     setInputValue("");
-  //     const response = request.data;
-  //     console.log(response);
-  //     setWeatherData(response);
-  //   }
-  // };
-  const handleOnSearchChange = (searchData) => {
-    console.log(searchData);
+  const getApi = async (cityInfo) => {
+    const request = await axios.get(
+      `${
+        import.meta.env.VITE_WEATHER_API_URL
+      }?q=${cityInfo}&units=metric&appid=${
+        import.meta.env.VITE_WEATHER_API_KEY
+      }`
+    );
+    const response = request.data;
+    console.log(response);
+  };
+  const handleOnSearchChange = (cityData) => {
+    console.log(cityData);
+    getApi(cityData.value);
   };
   return (
     <Container maxWidth='xl'>

@@ -17,8 +17,8 @@ const CitiesAutoComplete = ({ onSearchChange }) => {
         return {
           options: response.data.map((city) => {
             return {
-              value: `${city.name}, ${city.country}`,
-              label: `${city.name}, ${city.country}`,
+              value: `${city?.name}, ${city?.countryCode}`,
+              label: `${city?.name}, ${city?.countryCode}`,
             };
           }),
         };
