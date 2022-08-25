@@ -10,7 +10,7 @@ export const geoApiOptions = {
 };
 // receiving citioes option list by sending request to geoDB API
 export const loadOptions = async (inputValue) => {
-  return fetch(
+  return await fetch(
     `${
       import.meta.env.VITE_GEO_API_URL
     }/cities?minPopulation=200000&namePrefix=${inputValue}`,
