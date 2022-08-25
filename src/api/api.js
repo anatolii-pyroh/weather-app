@@ -8,7 +8,7 @@ export const geoApiOptions = {
     "X-RapidAPI-Host": "wft-geo-db.p.rapidapi.com",
   },
 };
-// receiving citioes option list by sending request to GEO db cities api
+// receiving citioes option list by sending request to geoDB API
 export const loadOptions = async (inputValue) => {
   return fetch(
     `${
@@ -39,8 +39,8 @@ export const getApi = async (cityInfo) => {
     }?q=${cityInfo}&units=metric&appid=${import.meta.env.VITE_WEATHER_API_KEY}`
   );
   const response = request.data;
-  let latitude = response.coord.lat;
-  let longitude = response.coord.lon;
+  const latitude = response.coord.lat;
+  const longitude = response.coord.lon;
   // get city weather forecast info for 5 days
   const request_ = await axios.get(
     `${
@@ -50,5 +50,10 @@ export const getApi = async (cityInfo) => {
     }`
   );
   const response_ = request_.data;
-  console.log(response_);
+  const finalObj = {
+    current: response,
+    forecast: response_,
+  };
+
+  return finalObj;
 };
