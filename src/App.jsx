@@ -4,7 +4,7 @@ import { Container, Box, TextField, Button } from "@mui/material";
 import CitiesAutoComplete from "./components/CitiesAutoComplete/CitiesAutoComplete";
 import { getApi } from "./api/api";
 import { useDispatch, useSelector } from "react-redux";
-import { addWeatherInfo } from "./redux/reducer/weatherSlice";
+import { addWeatherInfo } from "./redux/reducers/weatherSlice";
 
 function App() {
   const weather = useSelector((state) => {
