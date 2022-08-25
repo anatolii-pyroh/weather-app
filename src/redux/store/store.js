@@ -18,7 +18,7 @@ import forecastWeatherSlice from "../reducers/forecastWeatherSlice";
 const persistConfig = {
   key: "root",
   storage,
-  whitelist: ["currentWeather"]
+  whitelist: ["currentWeather"],
 };
 // if need, will add more reducers if create them
 const rootReducer = combineReducers({
