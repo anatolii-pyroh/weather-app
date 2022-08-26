@@ -44,7 +44,7 @@ export const getApi = async (cityInfo) => {
   // get city weather forecast info for 5 days
   const request_ = await axios.get(
     `${
-      import.meta.env.VITE_WEATHER_FORECAST_API_URL
+      import.meta.env.VITE_WEATHER_API_FORECAST_URL
     }?lat=${latitude}&lon=${longitude}&appid=${
       import.meta.env.VITE_WEATHER_API_KEY
     }`

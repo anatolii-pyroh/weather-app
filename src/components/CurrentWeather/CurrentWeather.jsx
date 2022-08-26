@@ -6,10 +6,10 @@ import classes from "./CurrentWeather.module.css";
 import CloudIcon from "@mui/icons-material/Cloud";
 import CompressIcon from "@mui/icons-material/Compress";
 import VisibilityIcon from "@mui/icons-material/Visibility";
-import WbSunnyIcon from '@mui/icons-material/WbSunny';
-import WbTwilightIcon from '@mui/icons-material/WbTwilight';
-import MyLocationIcon from '@mui/icons-material/MyLocation';
-import AirIcon from '@mui/icons-material/Air';
+import WbSunnyIcon from "@mui/icons-material/WbSunny";
+import WbTwilightIcon from "@mui/icons-material/WbTwilight";
+import MyLocationIcon from "@mui/icons-material/MyLocation";
+import AirIcon from "@mui/icons-material/Air";
 
 const CurrentWeather = () => {
   const currentWeather = useSelector((state) => state.currentWeather.info);
@@ -17,8 +17,12 @@ const CurrentWeather = () => {
   const weatherDescription = currentWeather.weather[0].description;
   const time = new Date(currentWeather.dt * 1000).toLocaleTimeString("it-IT");
   const date = new Date(currentWeather.dt * 1000).toLocaleDateString("en-GB");
-  const sunrise = new Date(currentWeather.sys.sunrise * 1000).toLocaleTimeString("it-IT");
-  const sunset = new Date(currentWeather.sys.sunset * 1000).toLocaleTimeString("it-IT");
+  const sunrise = new Date(
+    currentWeather.sys.sunrise * 1000
+  ).toLocaleTimeString("it-IT");
+  const sunset = new Date(currentWeather.sys.sunset * 1000).toLocaleTimeString(
+    "it-IT"
+  );
   const dayNumber = new Date().getDay();
   let weekDay;
   if (dayNumber === 1) weekDay = "Monday";
@@ -34,7 +38,7 @@ const CurrentWeather = () => {
     <Box className={classes["current-weather"]}>
       <Box className={classes["current-weather-card"]}>
         {/* city name, save button and date */}
-        <Box className={classes.title}>
+        <Box className={classes["current-weather-card-title"]}>
           <h3>
             {currentWeather?.name}, {currentWeather?.sys?.country}
           </h3>
@@ -43,14 +47,23 @@ const CurrentWeather = () => {
           </span>
         </Box>
         {/* weather icon and description */}
-        <Box className={classes["current-weather-icon"]}>
-          <img
-            src={`http://openweathermap.org/img/wn/${currentWeather.weather[0].icon}@4x.png`}
-            alt='openweathermap weather icon'
-            width={180}
-            height={180}
-          />
-          <h1>{currentWeather.main.temp.toFixed(1)}C°</h1>
+        <Box className={classes["current-weather-card-icon"]}>
+          <Box sx={{ display: "flex", alignItems: "center" }}>
+            <img
+              src={`http://openweathermap.org/img/wn/${currentWeather.weather[0].icon}@4x.png`}
+              alt='openweathermap weather icon'
+              width={180}
+              height={180}
+            />
+            <h1>{currentWeather.main.temp.toFixed(1)}C°</h1>
+          </Box>
+          <Button
+            variant='contained'
+            fullWidth
+            onClick={() => dispatch(saveCity(currentWeather))}
+          >
+            Save city
+          </Button>
         </Box>
       </Box>
 
