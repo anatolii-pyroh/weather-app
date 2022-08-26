@@ -10,9 +10,9 @@ import {
 import { getApi } from "./api/api";
 import { useDispatch, useSelector } from "react-redux";
 import { addCurrentWeather } from "./redux/reducers/currentWeatherSlice";
+import { addForecastWeather } from "./redux/reducers/forecastWeatherSlice";
 import CitiesAutoComplete from "./components/CitiesAutoComplete/CitiesAutoComplete";
 import CurrentWeather from "./components/CurrentWeather/CurrentWeather";
-
 function App() {
   const [alignment, setAlignment] = useState("daily");
   const weather = useSelector((state) => state.currentWeather.info);
@@ -28,6 +28,7 @@ function App() {
     const response = await getApi(cityData.value);
     console.log(response);
     dispatch(addCurrentWeather(response.current));
+    dispatch(addForecastWeather(response.forecast))
   };
 
   useEffect(() => {
