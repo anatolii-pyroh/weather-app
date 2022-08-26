@@ -72,7 +72,7 @@ const CurrentWeather = () => {
         <Box>
           <Box className={classes["desctiption-icon-with-text"]} sx={{ mt: 0 }}>
             <CloudIcon sx={{ mr: 1 }} />
-            <span>Weather condition: {weatherDescription}</span>
+            <span>Weather: {weatherDescription}</span>
           </Box>
           <Box className={classes["desctiption-icon-with-text"]}>
             <CompressIcon sx={{ mr: 1 }} />

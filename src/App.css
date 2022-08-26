@@ -5,8 +5,9 @@ body {
 }
 .App {
   position: relative;
-  padding: 1rem;
+  padding: 1.5rem;
   margin-top: 5rem;
+  border-radius: 20px;
   background-color: white;
 }
 
@@ -19,4 +20,4 @@ body {
 
 /* input:focus */
 .css-1pahdxg-control {
-}
+} 
