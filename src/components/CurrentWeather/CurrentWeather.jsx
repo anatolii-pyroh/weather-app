@@ -12,29 +12,42 @@ import MyLocationIcon from "@mui/icons-material/MyLocation";
 import AirIcon from "@mui/icons-material/Air";
 import moment from "moment-timezone";
 
-const CurrentWeather = () => {
-  const currentWeather = useSelector((state) => state.currentWeather.info);
+// currentDay prop to check if item selected for daily or forecast view
+const CurrentWeather = ({ weather, currentDay, forecast }) => {
   const dispatch = useDispatch();
-  const weatherDescription = currentWeather.weather[0].description;
-  // const time = new Date(currentWeather.dt * 1000).toLocaleTimeString("it-IT");
-  const date = new Date(currentWeather.dt * 1000).toLocaleDateString("en-GB");
-  const sunrise = moment
-    .utc(currentWeather.sys.sunrise, "X")
-    .add(currentWeather.timezone, "seconds")
-    .format("HH:mm");
-  const sunset = moment
-    .utc(currentWeather.sys.sunset, "X")
-    .add(currentWeather.timezone, "seconds")
-    .format("HH:mm");
-  const dayNumber = new Date().getDay();
-  let weekDay;
+  const weatherDescription = weather.weather[0].description;
+  // const time = new Date(weather.dt * 1000).toLocaleTimeString("it-IT");
+  const date = new Date(weather.dt * 1000).toLocaleDateString("en-GB");
+  const dayNumber = new Date(weather.dt * 1000).getDay();
+  let weekDay = "Sunday";
   if (dayNumber === 1) weekDay = "Monday";
-  if (dayNumber === 2) weekDay = "Saturday";
+  if (dayNumber === 2) weekDay = "Tuesday";
   if (dayNumber === 3) weekDay = "Wednesday";
   if (dayNumber === 4) weekDay = "Thursday";
   if (dayNumber === 5) weekDay = "Friday";
   if (dayNumber === 6) weekDay = "Saturday";
-  if (dayNumber === 7) weekDay = "Sunday";
+
+  let sunrise;
+  let sunset;
+  if (forecast) {
+    sunrise = moment
+      .utc(forecast?.city?.sunrise, "X")
+      .add(forecast?.city?.timezone, "seconds")
+      .format("HH:mm");
+    sunset = moment
+      .utc(forecast?.city?.sunset, "X")
+      .add(forecast?.city?.timezone, "seconds")
+      .format("HH:mm");
+  } else {
+    sunrise = moment
+      .utc(weather?.sys?.sunrise, "X")
+      .add(weather?.timezone, "seconds")
+      .format("HH:mm");
+    sunset = moment
+      .utc(weather?.sys?.sunset, "X")
+      .add(weather?.timezone, "seconds")
+      .format("HH:mm");
+  }
 
   return (
     // whole currentweather block
@@ -43,7 +56,11 @@ const CurrentWeather = () => {
         {/* city name, save button and date */}
         <Box className={classes["current-weather-card-title"]}>
           <h3>
-            {currentWeather?.name}, {currentWeather?.sys?.country}
+            {currentDay && (
+              <>
+                {weather?.name}, {weather?.sys?.country}
+              </>
+            )}
           </h3>
           <span>
             {weekDay}, {date}
@@ -53,20 +70,22 @@ const CurrentWeather = () => {
         <Box className={classes["current-weather-card-icon"]}>
           <Box sx={{ display: "flex", alignItems: "center" }}>
             <img
-              src={`http://openweathermap.org/img/wn/${currentWeather.weather[0].icon}@4x.png`}
+              src={`http://openweathermap.org/img/wn/${weather.weather[0].icon}@4x.png`}
               alt='openweathermap weather icon'
               width={180}
               height={180}
             />
-            <h1>{currentWeather.main.temp.toFixed(1)}C°</h1>
+            <h1>{weather.main.temp.toFixed(1)}C°</h1>
           </Box>
-          <Button
-            variant='contained'
-            fullWidth
-            onClick={() => dispatch(saveCity(currentWeather))}
-          >
-            Save city
-          </Button>
+          {currentDay && (
+            <Button
+              variant='contained'
+              fullWidth
+              onClick={() => dispatch(saveCity(weather))}
+            >
+              Save city
+            </Button>
+          )}
         </Box>
       </Box>
 
@@ -79,7 +98,7 @@ const CurrentWeather = () => {
           </Box>
           <Box className={classes["desctiption-icon-with-text"]}>
             <CompressIcon sx={{ mr: 1 }} />
-            <span>Pressure(sea level): {currentWeather.main.pressure} hPa</span>
+            <span>Pressure(sea level): {weather.main.pressure} hPa</span>
           </Box>
           <Box className={classes["desctiption-icon-with-text"]}>
             <WbSunnyIcon sx={{ mr: 1 }} />
@@ -87,7 +106,7 @@ const CurrentWeather = () => {
           </Box>
           <Box className={classes["desctiption-icon-with-text"]}>
             <MyLocationIcon sx={{ mr: 1 }} />
-            <span>Wind direction: {currentWeather.wind.deg}°</span>
+            <span>Wind direction: {weather.wind.deg}°</span>
           </Box>
         </Box>
 
@@ -95,13 +114,11 @@ const CurrentWeather = () => {
         <Box>
           <Box className={classes["desctiption-icon-with-text"]} sx={{ mt: 0 }}>
             <CloudIcon sx={{ mr: 1 }} />
-            <span>Cloudiness: {currentWeather.clouds.all}%</span>
+            <span>Cloudiness: {weather.clouds.all}%</span>
           </Box>
           <Box className={classes["desctiption-icon-with-text"]}>
             <VisibilityIcon sx={{ mr: 1 }} />
-            <span>
-              Visibility: {(currentWeather.visibility / 100).toFixed()}%
-            </span>
+            <span>Visibility: {(weather.visibility / 100).toFixed()}%</span>
           </Box>
           <Box className={classes["desctiption-icon-with-text"]}>
             <WbTwilightIcon sx={{ mr: 1 }} />
@@ -109,7 +126,7 @@ const CurrentWeather = () => {
           </Box>
           <Box className={classes["desctiption-icon-with-text"]}>
             <AirIcon sx={{ mr: 1 }} />
-            <span>Wind speed: {currentWeather.wind.speed} m/s</span>
+            <span>Wind speed: {weather.wind.speed} m/s</span>
           </Box>
         </Box>
       </Box>

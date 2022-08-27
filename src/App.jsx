@@ -58,7 +58,7 @@ function App() {
               handleChangeAlignment={handleChange}
             />
             {/* daily,forecast,saved cities buttons */}
-            {alignment === "daily" && <CurrentWeather />}
+            {alignment === "daily" && <CurrentWeather weather={weather} currentDay={true} forecast={false}/>}
             {alignment === "forecast" && <ForecastWeatherList />}
           </Fragment>
         )}
