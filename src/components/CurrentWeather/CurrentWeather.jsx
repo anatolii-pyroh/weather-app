@@ -10,19 +10,22 @@ import WbSunnyIcon from "@mui/icons-material/WbSunny";
 import WbTwilightIcon from "@mui/icons-material/WbTwilight";
 import MyLocationIcon from "@mui/icons-material/MyLocation";
 import AirIcon from "@mui/icons-material/Air";
+import moment from "moment-timezone";
 
 const CurrentWeather = () => {
   const currentWeather = useSelector((state) => state.currentWeather.info);
   const dispatch = useDispatch();
   const weatherDescription = currentWeather.weather[0].description;
-  const time = new Date(currentWeather.dt * 1000).toLocaleTimeString("it-IT");
+  // const time = new Date(currentWeather.dt * 1000).toLocaleTimeString("it-IT");
   const date = new Date(currentWeather.dt * 1000).toLocaleDateString("en-GB");
-  const sunrise = new Date(
-    currentWeather.sys.sunrise * 1000
-  ).toLocaleTimeString("it-IT");
-  const sunset = new Date(currentWeather.sys.sunset * 1000).toLocaleTimeString(
-    "it-IT"
-  );
+  const sunrise = moment
+    .utc(currentWeather.sys.sunrise, "X")
+    .add(currentWeather.timezone, "seconds")
+    .format("HH:mm");
+  const sunset = moment
+    .utc(currentWeather.sys.sunset, "X")
+    .add(currentWeather.timezone, "seconds")
+    .format("HH:mm");
   const dayNumber = new Date().getDay();
   let weekDay;
   if (dayNumber === 1) weekDay = "Monday";

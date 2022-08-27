@@ -1,22 +1,18 @@
 import "./App.css";
 import { useState, useEffect, Fragment } from "react";
-import {
-  Container,
-  Box,
-  Button,
-  ToggleButton,
-  ToggleButtonGroup,
-} from "@mui/material";
+import { Container } from "@mui/material";
 import { getApi } from "./api/api";
 import { useDispatch, useSelector } from "react-redux";
 import { addCurrentWeather } from "./redux/reducers/currentWeatherSlice";
 import { addForecastWeather } from "./redux/reducers/forecastWeatherSlice";
 import CitiesAutoComplete from "./components/CitiesAutoComplete/CitiesAutoComplete";
 import CurrentWeather from "./components/CurrentWeather/CurrentWeather";
+import ForecastWeatherList from "./components/ForecastWeather/ForecastWeatherList";
+import ToggleSectionButton from "./components/ToggleButton/ToggleSectionButton";
 function App() {
-  const [alignment, setAlignment] = useState("daily");
   const weather = useSelector((state) => state.currentWeather.info);
   const dispatch = useDispatch();
+  const [alignment, setAlignment] = useState("daily");
 
   // switch selected button content
   const handleChange = (event, newAlignment) => {
@@ -25,15 +21,31 @@ function App() {
   // receiving data from input (geoDB cities API) and send it to getApi function,
   // also giving our state from redux a new value(current city info)
   const handleOnSearchChange = async (cityData) => {
-    const response = await getApi(cityData.value);
+    const request = await getApi(cityData.value);
+    const response = request;
     console.log(response);
     dispatch(addCurrentWeather(response.current));
-    dispatch(addForecastWeather(response.forecast))
+    dispatch(addForecastWeather(response.forecast));
   };
 
   useEffect(() => {
-    console.log(weather);
+    // console.log(weather);
   }, [weather]);
+
+  // send request while page first time load
+  useEffect(() => {
+    if (weather) {
+      const cityName = `${weather?.name}, ${weather?.sys.country}`;
+      const getWeatherInfo = async () => {
+        const request = await getApi(cityName);
+        const response = request;
+        console.log(response);
+        dispatch(addCurrentWeather(response.current));
+        dispatch(addForecastWeather(response.forecast));
+      };
+      getWeatherInfo();
+    }
+  }, []);
 
   return (
     <Container maxWidth='lg'>
@@ -41,21 +53,13 @@ function App() {
         <CitiesAutoComplete onSearchChange={handleOnSearchChange} />
         {weather && (
           <Fragment>
+            <ToggleSectionButton
+              alignment={alignment}
+              handleChangeAlignment={handleChange}
+            />
             {/* daily,forecast,saved cities buttons */}
-            <Box sx={{ display: "flex", justifyContent: "center", mt: 3 }}>
-              <ToggleButtonGroup
-                color='primary'
-                value={alignment}
-                exclusive
-                onChange={handleChange}
-                aria-label='Platform'
-              >
-                <ToggleButton value='daily'>Daily</ToggleButton>
-                <ToggleButton value='forecast'>Forecast</ToggleButton>
-                <ToggleButton value='saved cities'>Saved cities</ToggleButton>
-              </ToggleButtonGroup>
-            </Box>
             {alignment === "daily" && <CurrentWeather />}
+            {alignment === "forecast" && <ForecastWeatherList />}
           </Fragment>
         )}
       </div>
