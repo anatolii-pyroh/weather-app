@@ -9,7 +9,7 @@ import CitiesAutoComplete from "./components/CitiesAutoComplete/CitiesAutoComple
 import CurrentWeather from "./components/CurrentWeather/CurrentWeather";
 import ForecastWeatherList from "./components/ForecastWeather/ForecastWeatherList";
 import ToggleSectionButton from "./components/ToggleButton/ToggleSectionButton";
-import SavedCities from "./components/SavedCities/SavedCities";
+import SavedCitiesList from "./components/SavedCities/SavedCitiesList";
 import { updateData } from "./utils/UpdateData";
 
 function App() {
@@ -63,7 +63,7 @@ function App() {
               />
             )}
             {alignment === "5 days forecast" && <ForecastWeatherList />}
-            {alignment === "saved cities" && <SavedCities />}
+            {alignment === "saved cities" && <SavedCitiesList />}
           </Fragment>
         )}
       </div>
