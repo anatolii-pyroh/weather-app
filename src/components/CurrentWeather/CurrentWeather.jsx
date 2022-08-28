@@ -12,8 +12,9 @@ import MyLocationIcon from "@mui/icons-material/MyLocation";
 import AirIcon from "@mui/icons-material/Air";
 import moment from "moment-timezone";
 
-// currentDay prop to check if item selected for daily or forecast view
-const CurrentWeather = ({ weather, currentDay, forecast }) => {
+// currentDay and forecast props to check if item selected for daily or forecast view
+// saved prop to check if item viewed in saved tab to hide "Save city" button
+const CurrentWeather = ({ weather, currentDay, forecast, saved }) => {
   const dispatch = useDispatch();
   const weatherDescription = weather.weather[0].description;
   // const time = new Date(weather.dt * 1000).toLocaleTimeString("it-IT");
@@ -78,13 +79,17 @@ const CurrentWeather = ({ weather, currentDay, forecast }) => {
             <h1>{weather.main.temp.toFixed(1)}C°</h1>
           </Box>
           {currentDay && (
-            <Button
-              variant='contained'
-              fullWidth
-              onClick={() => dispatch(saveCity(weather))}
-            >
-              Save city
-            </Button>
+            <Fragment>
+              {!saved && (
+                <Button
+                  variant='contained'
+                  fullWidth
+                  onClick={() => dispatch(saveCity(weather))}
+                >
+                  Save city
+                </Button>
+              )}
+            </Fragment>
           )}
         </Box>
       </Box>

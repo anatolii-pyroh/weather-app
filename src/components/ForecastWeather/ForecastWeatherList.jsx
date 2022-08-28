@@ -1,4 +1,4 @@
-import { List, Box } from "@mui/material";
+import { List, Box, ListItem } from "@mui/material";
 import React from "react";
 import { useSelector } from "react-redux";
 import CurrentWeather from "../CurrentWeather/CurrentWeather";
@@ -17,14 +17,22 @@ const ForecastWeatherList = () => {
       }}
     >
       <List>
-        {/* filter by every 8 element(24 hours from previous day) */}
+        {/* filter by every 8 element(24 hours from previous element) */}
         {/* plus element 39(last day of forecast) */}
         {forecastWeather.list
           .filter(
             (item, index) => index !== 0 && (index === 39 || index % 8 === 0)
           )
           .map((item) => (
-            <CurrentWeather key={item.dt} weather={item} currentDay={false} forecast={forecastWeather} />
+            <li>
+              <CurrentWeather
+                key={item.dt}
+                weather={item}
+                currentDay={false}
+                forecast={forecastWeather}
+                saved={false}
+              />
+            </li>
           ))}
       </List>
     </Box>

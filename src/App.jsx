@@ -9,10 +9,12 @@ import CitiesAutoComplete from "./components/CitiesAutoComplete/CitiesAutoComple
 import CurrentWeather from "./components/CurrentWeather/CurrentWeather";
 import ForecastWeatherList from "./components/ForecastWeather/ForecastWeatherList";
 import ToggleSectionButton from "./components/ToggleButton/ToggleSectionButton";
+import SavedCities from "./components/SavedCities/SavedCities";
+
 function App() {
   const weather = useSelector((state) => state.currentWeather.info);
-  const dispatch = useDispatch();
   const [alignment, setAlignment] = useState("daily");
+  const dispatch = useDispatch();
 
   // switch selected button content
   const handleChange = (event, newAlignment) => {
@@ -58,8 +60,16 @@ function App() {
               handleChangeAlignment={handleChange}
             />
             {/* daily,forecast,saved cities buttons */}
-            {alignment === "daily" && <CurrentWeather weather={weather} currentDay={true} forecast={false}/>}
-            {alignment === "forecast" && <ForecastWeatherList />}
+            {alignment === "daily" && (
+              <CurrentWeather
+                weather={weather}
+                currentDay={true}
+                forecast={false}
+                saved={false}
+              />
+            )}
+            {alignment === "5 days forecast" && <ForecastWeatherList />}
+            {alignment === "saved cities" && <SavedCities />}
           </Fragment>
         )}
       </div>

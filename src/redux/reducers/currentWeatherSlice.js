@@ -11,8 +11,7 @@ export const currentWeatherSlice = createSlice({
       state.info = JSON.parse(JSON.stringify(action.payload));
     },
     saveCity(state, action) {
-      console.log(action.payload)
-      // state.savedCities.unshift(JSON.parse(JSON.stringify(action.payload)));
+      state.savedCities.unshift(JSON.parse(JSON.stringify(action.payload)));
     },
   },
 });

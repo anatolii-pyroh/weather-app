@@ -13,7 +13,7 @@ const ToggleSectionButton = ({ alignment, handleChangeAlignment }) => {
         aria-label='Platform'
       >
         <ToggleButton value='daily'>Daily</ToggleButton>
-        <ToggleButton value='forecast'>Forecast</ToggleButton>
+        <ToggleButton value='5 days forecast'>5 Days forecast</ToggleButton>
         <ToggleButton value='saved cities'>Saved cities</ToggleButton>
       </ToggleButtonGroup>
     </Box>
