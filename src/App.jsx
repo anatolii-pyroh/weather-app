@@ -1,7 +1,7 @@
 import "./App.css";
 import { useState, useEffect, Fragment } from "react";
 import { Container } from "@mui/material";
-import { getApi } from "./api/api";
+import { getApi } from "./api/index";
 import { useDispatch, useSelector } from "react-redux";
 import { addCurrentWeather } from "./redux/reducers/currentWeatherSlice";
 import { addForecastWeather } from "./redux/reducers/forecastWeatherSlice";
@@ -10,6 +10,7 @@ import CurrentWeather from "./components/CurrentWeather/CurrentWeather";
 import ForecastWeatherList from "./components/ForecastWeather/ForecastWeatherList";
 import ToggleSectionButton from "./components/ToggleButton/ToggleSectionButton";
 import SavedCities from "./components/SavedCities/SavedCities";
+import { updateData } from "./utils/UpdateData";
 
 function App() {
   const weather = useSelector((state) => state.currentWeather.info);
@@ -23,25 +24,22 @@ function App() {
   // receiving data from input (geoDB cities API) and send it to getApi function,
   // also giving our state from redux a new value(current city info)
   const handleOnSearchChange = async (cityData) => {
-    const request = await getApi(cityData.value);
-    const response = request;
+    const response = await getApi(cityData.value);
     console.log(response);
     dispatch(addCurrentWeather(response.current));
     dispatch(addForecastWeather(response.forecast));
   };
 
-  // send request while page first time load
+  const updateWeatherInfo = async () => {
+    const response = await updateData(weather);
+    dispatch(addCurrentWeather(response.current));
+    dispatch(addForecastWeather(response.forecast));
+  };
+
+  // update while page first time load
   useEffect(() => {
     if (weather) {
-      const cityName = `${weather?.name}, ${weather?.sys.country}`;
-      const getWeatherInfo = async () => {
-        const request = await getApi(cityName);
-        const response = request;
-        // console.log(response);
-        dispatch(addCurrentWeather(response.current));
-        dispatch(addForecastWeather(response.forecast));
-      };
-      getWeatherInfo();
+      updateWeatherInfo();
     }
   }, []);
 

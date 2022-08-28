@@ -33,27 +33,27 @@ export const loadOptions = async (inputValue) => {
 // openweathermap API
 export const getApi = async (cityInfo) => {
   // get city longitude and latitude
-  const request = await axios.get(
+  const response = await axios.get(
     `${
       import.meta.env.VITE_WEATHER_API_DAILY_URL
     }?q=${cityInfo}&units=metric&appid=${import.meta.env.VITE_WEATHER_API_KEY}`
   );
-  const response = request.data;
-  const latitude = response.coord.lat;
-  const longitude = response.coord.lon;
+
+  const latitude = response.data.coord.lat;
+  const longitude = response.data.coord.lon;
   // get city weather forecast info for 5 days
-  const request_ = await axios.get(
+  const response_ = await axios.get(
     `${
       import.meta.env.VITE_WEATHER_API_FORECAST_URL
     }?lat=${latitude}&lon=${longitude}&units=metric&appid=${
       import.meta.env.VITE_WEATHER_API_KEY
     }`
   );
-  const response_ = request_.data;
-  const finalObj = {
-    current: response,
-    forecast: response_,
+
+  const cityWeatherInfo = {
+    current: response.data,
+    forecast: response_.data,
   };
 
-  return finalObj;
+  return cityWeatherInfo;
 };

@@ -48,8 +48,8 @@ const CurrentWeather = ({ weather, currentDay, forecast, saved }) => {
         vertical: "top",
         horizontal: "center",
       });
+      dispatch(saveCity(weather));
     }
-    // dispatch(saveCity(weather))
   };
   // const time = new Date(weather.dt * 1000).toLocaleTimeString("it-IT");
   const date = new Date(weather.dt * 1000).toLocaleDateString("en-GB");
