@@ -13,9 +13,15 @@ export const currentWeatherSlice = createSlice({
     saveCity(state, action) {
       state.savedCities.unshift(JSON.parse(JSON.stringify(action.payload)));
     },
+    deleteCity(state, action) {
+      state.savedCities = state.savedCities.filter(
+        (item) => item.id !== action.payload.id
+      );
+    },
   },
 });
 
-export const { addCurrentWeather, saveCity } = currentWeatherSlice.actions;
+export const { addCurrentWeather, saveCity, deleteCity } =
+  currentWeatherSlice.actions;
 
 export default currentWeatherSlice.reducer;

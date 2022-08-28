@@ -1,35 +1,75 @@
-import { Box, List } from "@mui/material";
-import React, { Fragment } from "react";
-import { useSelector } from "react-redux";
-import { updateData } from "../../utils/UpdateData";
-import CurrentWeather from "../CurrentWeather/CurrentWeather";
-import SavedCitiesItem from "./SavedCitiesItem";
+import React, { Fragment, useState } from "react";
+import Box from "@mui/material/Box";
+import Drawer from "@mui/material/Drawer";
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
+import ListItemButton from "@mui/material/ListItemButton";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import ListItemText from "@mui/material/ListItemText";
+import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  addCurrentWeather,
+  deleteCity,
+} from "../../redux/reducers/currentWeatherSlice";
+import { getApi } from "../../api";
+import { addForecastWeather } from "../../redux/reducers/forecastWeatherSlice";
 
-const SavedCities = () => {
-  const cities = useSelector((state) => state.currentWeather.savedCities);
+const SavedCitiesList = ({setAlignment}) => {
+  const savedCities = useSelector((state) => state.currentWeather.savedCities);
+  const dispatch = useDispatch();
+  const [state, setState] = useState({
+    left: true,
+  });
 
-  console.log(cities);
+  const toggleDrawer = (anchor, open) => (event) => {
+    if (
+      event.type === "keydown" &&
+      (event.key === "Tab" || event.key === "Shift")
+    ) {
+      return;
+    }
+    setState({ ...state, [anchor]: open });
+  };
+
+  const showCityInfo = async (cityInfo) => {
+    setAlignment("daily")
+    const response = await getApi(cityInfo);
+    dispatch(addCurrentWeather(response.current));
+    dispatch(addForecastWeather(response.forecast));
+  };
   return (
-    <Fragment>
-      {cities.length > 0 && (
-        <Box
-          sx={{
-            overflowY: "auto",
-            height: "35rem",
-            mt: "1rem",
-            borderRadius: "20px",
-            padding: "0.5rem",
-          }}
-        >
+    <div>
+      <Drawer
+        anchor={"left"}
+        open={state["left"]}
+        onClose={toggleDrawer("left", false)}
+      >
+        <Box sx={{ width: 250 }} role='presentation'>
           <List>
-            {cities.map((item) => (
-              <SavedCitiesItem key={item.id} item={item}/>
+            {savedCities.map((city) => (
+              <ListItem key={city.dt} disablePadding>
+                <ListItemButton>
+                  <ListItemIcon>
+                    <DeleteForeverIcon
+                      onClick={() => dispatch(deleteCity(city))}
+                    />
+                  </ListItemIcon>
+                  <ListItemText
+                    onClick={() =>
+                      showCityInfo(`${city.name}, ${city.sys.country}`)
+                    }
+                    onKeyDown={toggleDrawer("left", false)}
+                    primary={`${city.name}, ${city.sys.country}`}
+                  />
+                </ListItemButton>
+              </ListItem>
             ))}
           </List>
         </Box>
-      )}
-    </Fragment>
+      </Drawer>
+    </div>
   );
-};
+}
 
-export default SavedCities;
+export default SavedCitiesList;

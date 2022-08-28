@@ -63,7 +63,7 @@ function App() {
               />
             )}
             {alignment === "5 days forecast" && <ForecastWeatherList />}
-            {alignment === "saved cities" && <SavedCitiesList />}
+            {alignment === "saved cities" && <SavedCitiesList setAlignment={setAlignment}/>}
           </Fragment>
         )}
       </div>
