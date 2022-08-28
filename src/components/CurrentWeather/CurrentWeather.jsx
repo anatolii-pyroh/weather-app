@@ -1,5 +1,5 @@
 import React, { Fragment, useState, useEffect } from "react";
-import { Box, Button } from "@mui/material";
+import { Box, Button, Snackbar } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { saveCity } from "../../redux/reducers/currentWeatherSlice";
 import classes from "./CurrentWeather.module.css";
@@ -17,6 +17,40 @@ import moment from "moment-timezone";
 const CurrentWeather = ({ weather, currentDay, forecast, saved }) => {
   const dispatch = useDispatch();
   const weatherDescription = weather.weather[0].description;
+  const savedCities = useSelector((state) => state.currentWeather.savedCities);
+  // states for alert message for success or fail save city
+  const [alertState, setAlertState] = useState({
+    open: false,
+    vertical: "top",
+    horizontal: "center",
+  });
+  const { vertical, horizontal, open } = alertState;
+  const [isSuccess, setIsSuccess] = useState(true);
+  // successfull alert show and hide
+  const handleClick = (newAlertState) => {
+    setAlertState({ open: true, ...newAlertState });
+  };
+  const handleClose = () => {
+    setAlertState({ ...alertState, open: false });
+  };
+  // function to save city or decline if already saved
+  const save = () => {
+    const check = savedCities.findIndex((item) => item.id === weather.id);
+    if (check !== -1) {
+      setIsSuccess(false);
+      handleClick({
+        vertical: "top",
+        horizontal: "center",
+      });
+    } else {
+      setIsSuccess(true);
+      handleClick({
+        vertical: "top",
+        horizontal: "center",
+      });
+    }
+    // dispatch(saveCity(weather))
+  };
   // const time = new Date(weather.dt * 1000).toLocaleTimeString("it-IT");
   const date = new Date(weather.dt * 1000).toLocaleDateString("en-GB");
   const dayNumber = new Date(weather.dt * 1000).getDay();
@@ -81,11 +115,7 @@ const CurrentWeather = ({ weather, currentDay, forecast, saved }) => {
           {currentDay && (
             <Fragment>
               {!saved && (
-                <Button
-                  variant='contained'
-                  fullWidth
-                  onClick={() => dispatch(saveCity(weather))}
-                >
+                <Button variant='contained' fullWidth onClick={save}>
                   Save city
                 </Button>
               )}
@@ -135,6 +165,24 @@ const CurrentWeather = ({ weather, currentDay, forecast, saved }) => {
           </Box>
         </Box>
       </Box>
+      {currentDay && (
+        <Snackbar
+          anchorOrigin={{ vertical, horizontal }}
+          open={open}
+          message={isSuccess ? "City saved" : "You already saved this city"}
+          onClose={handleClose}
+          key={vertical + horizontal}
+          autoHideDuration={3000}
+          ContentProps={{
+            sx: {
+              fontSize: "1rem",
+              background: isSuccess ? "rgb(46,125,50)" : "rgb(211,47,47)",
+              display: "block",
+              textAlign: "center",
+            },
+          }}
+        />
+      )}
     </Box>
   );
 };

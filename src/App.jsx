@@ -30,10 +30,6 @@ function App() {
     dispatch(addForecastWeather(response.forecast));
   };
 
-  useEffect(() => {
-    // console.log(weather);
-  }, [weather]);
-
   // send request while page first time load
   useEffect(() => {
     if (weather) {
@@ -41,7 +37,7 @@ function App() {
       const getWeatherInfo = async () => {
         const request = await getApi(cityName);
         const response = request;
-        console.log(response);
+        // console.log(response);
         dispatch(addCurrentWeather(response.current));
         dispatch(addForecastWeather(response.forecast));
       };

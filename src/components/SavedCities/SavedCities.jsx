@@ -17,9 +17,8 @@ const SavedCities = () => {
     >
       <List>
         {cities.map((item) => (
-          <li>
+          <li key={item.id}>
             <CurrentWeather
-              key={item.id}
               weather={item}
               currentDay={true}
               forecast={false}

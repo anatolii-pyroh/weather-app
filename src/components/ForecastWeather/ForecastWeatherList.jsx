@@ -5,7 +5,7 @@ import CurrentWeather from "../CurrentWeather/CurrentWeather";
 
 const ForecastWeatherList = () => {
   const forecastWeather = useSelector((state) => state.forecastWeather.info);
-  console.log(forecastWeather);
+  // console.log(forecastWeather);
   return (
     <Box
       sx={{
@@ -24,9 +24,8 @@ const ForecastWeatherList = () => {
             (item, index) => index !== 0 && (index === 39 || index % 8 === 0)
           )
           .map((item) => (
-            <li>
+            <li key={item.dt}>
               <CurrentWeather
-                key={item.dt}
                 weather={item}
                 currentDay={false}
                 forecast={forecastWeather}
