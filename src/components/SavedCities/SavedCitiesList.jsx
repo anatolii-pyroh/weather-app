@@ -29,6 +29,7 @@ const SavedCitiesList = ({setAlignment}) => {
     ) {
       return;
     }
+    setAlignment("daily")
     setState({ ...state, [anchor]: open });
   };
 
