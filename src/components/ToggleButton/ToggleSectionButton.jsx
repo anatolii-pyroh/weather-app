@@ -1,8 +1,11 @@
 import React from "react";
 import { Box, ToggleButton, ToggleButtonGroup } from "@mui/material";
+import { useSelector } from "react-redux";
 
 const ToggleSectionButton = ({ alignment, handleChangeAlignment }) => {
-  
+  const isAnyCitySaved = useSelector(
+    (state) => state.currentWeather.savedCities
+  );
   return (
     <Box sx={{ display: "flex", justifyContent: "center", mt: 3 }}>
       <ToggleButtonGroup
@@ -14,7 +17,9 @@ const ToggleSectionButton = ({ alignment, handleChangeAlignment }) => {
       >
         <ToggleButton value='daily'>Daily</ToggleButton>
         <ToggleButton value='5 days forecast'>5 Days forecast</ToggleButton>
-        <ToggleButton value='saved cities'>Saved cities</ToggleButton>
+        {isAnyCitySaved.length > 0 && (
+          <ToggleButton value='saved cities'>Saved cities</ToggleButton>
+        )}
       </ToggleButtonGroup>
     </Box>
   );
