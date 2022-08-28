@@ -57,3 +57,4 @@ export const getApi = async (cityInfo) => {
 
   return cityWeatherInfo;
 };
+

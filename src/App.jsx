@@ -1,4 +1,5 @@
 import "./App.css";
+import axios from "axios";
 import { useState, useEffect, Fragment } from "react";
 import { Container } from "@mui/material";
 import { getApi } from "./api/index";
@@ -13,6 +14,7 @@ import SavedCitiesList from "./components/SavedCities/SavedCitiesList";
 import { updateData } from "./utils/UpdateData";
 
 function App() {
+  const [nativeCity, setNativeCity] = useState();
   const weather = useSelector((state) => state.currentWeather.info);
   const [alignment, setAlignment] = useState("daily");
   const dispatch = useDispatch();
@@ -36,11 +38,45 @@ function App() {
     dispatch(addForecastWeather(response.forecast));
   };
 
+  // functions to get current location
+  const success = async ({ coords }) => {
+    const { latitude, longitude } = coords;
+    const response = await axios.get(
+      `${
+        import.meta.env.VITE_WEATHER_API_DAILY_URL
+      }?lat=${latitude}&lon=${longitude}&units=metric&appid=${
+        import.meta.env.VITE_WEATHER_API_KEY
+      }`
+    );
+    setNativeCity(response.data);
+  };
+
+  const error = ({ message }) => {
+    console.log(message);
+  };
+
+  const getNativeCity = async () => {
+    const response = await updateData(nativeCity);
+    console.log(response);
+    dispatch(addCurrentWeather(response.current));
+    dispatch(addForecastWeather(response.forecast));
+  };
+
+  // get user current city weather cast
+  useEffect(() => {
+    if (nativeCity) {
+      getNativeCity();
+    }
+  }, [nativeCity]);
+
   // update while page first time load
   useEffect(() => {
     if (weather) {
       updateWeatherInfo();
     }
+    navigator.geolocation.getCurrentPosition(success, error, {
+      enableHighAccuracy: true,
+    });
   }, []);
 
   return (
@@ -63,7 +99,9 @@ function App() {
               />
             )}
             {alignment === "5 days forecast" && <ForecastWeatherList />}
-            {alignment === "saved cities" && <SavedCitiesList setAlignment={setAlignment}/>}
+            {alignment === "saved cities" && (
+              <SavedCitiesList setAlignment={setAlignment} />
+            )}
           </Fragment>
         )}
       </div>
