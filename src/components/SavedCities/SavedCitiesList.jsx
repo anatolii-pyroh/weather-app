@@ -15,7 +15,7 @@ import {
 import { getApi } from "../../api";
 import { addForecastWeather } from "../../redux/reducers/forecastWeatherSlice";
 
-const SavedCitiesList = ({setAlignment}) => {
+const SavedCitiesList = ({ setAlignment }) => {
   const savedCities = useSelector((state) => state.currentWeather.savedCities);
   const dispatch = useDispatch();
   const [state, setState] = useState({
@@ -29,12 +29,12 @@ const SavedCitiesList = ({setAlignment}) => {
     ) {
       return;
     }
-    setAlignment("daily")
+    setAlignment("daily");
     setState({ ...state, [anchor]: open });
   };
 
   const showCityInfo = async (cityInfo) => {
-    setAlignment("daily")
+    setAlignment("daily");
     const response = await getApi(cityInfo);
     dispatch(addCurrentWeather(response.current));
     dispatch(addForecastWeather(response.forecast));
@@ -47,7 +47,7 @@ const SavedCitiesList = ({setAlignment}) => {
         onClose={toggleDrawer("left", false)}
       >
         <Box sx={{ width: 250 }} role='presentation'>
-          <List>
+          <List sx={{ overflowY: "auto" }}>
             {savedCities.map((city) => (
               <ListItem key={city.dt} disablePadding>
                 <ListItemButton>
@@ -71,6 +71,6 @@ const SavedCitiesList = ({setAlignment}) => {
       </Drawer>
     </div>
   );
-}
+};
 
 export default SavedCitiesList;
