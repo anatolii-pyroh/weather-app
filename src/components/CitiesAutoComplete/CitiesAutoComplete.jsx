@@ -2,6 +2,7 @@ import React from "react";
 import { AsyncPaginate } from "react-select-async-paginate";
 import { loadOptions } from "../../api/index";
 
+// component which contains input and popup select menu with cities
 const CitiesAutoComplete = ({ onSearchChange }) => {
   // sending info to App.js after selecting a city from list
   const handleOnChange = (searchData) => {

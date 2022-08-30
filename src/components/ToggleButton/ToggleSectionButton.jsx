@@ -3,6 +3,7 @@ import { Box, ToggleButton, ToggleButtonGroup } from "@mui/material";
 import { useSelector } from "react-redux";
 
 const ToggleSectionButton = ({ alignment, handleChangeAlignment }) => {
+  // show "saved cities" button if any is saved
   const isAnyCitySaved = useSelector(
     (state) => state.currentWeather.savedCities
   );

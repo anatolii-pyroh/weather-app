@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+// state for forecast weather
 export const forecastWeatherSlice = createSlice({
   name: "forecastWeather",
   initialState: {

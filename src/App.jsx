@@ -32,6 +32,7 @@ function App() {
     dispatch(addForecastWeather(response.forecast));
   };
 
+  // update current day weather info
   const updateWeatherInfo = async () => {
     const response = await updateData(weather);
     dispatch(addCurrentWeather(response.current));

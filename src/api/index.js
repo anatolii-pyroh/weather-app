@@ -8,7 +8,7 @@ export const geoApiOptions = {
     "X-RapidAPI-Host": "wft-geo-db.p.rapidapi.com",
   },
 };
-// receiving citioes option list by sending request to geoDB API
+// receiving citioes option list under input by sending request to geoDB API
 export const loadOptions = async (inputValue) => {
   return await fetch(
     `${
@@ -50,6 +50,7 @@ export const getApi = async (cityInfo) => {
     }`
   );
 
+  // return current and forecast weather for selected city
   const cityWeatherInfo = {
     current: response.data,
     forecast: response_.data,

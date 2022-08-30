@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+// state for current day weather and saved cities
 export const currentWeatherSlice = createSlice({
   name: "currentWeather",
   initialState: {

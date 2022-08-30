@@ -13,8 +13,7 @@ import AirIcon from "@mui/icons-material/Air";
 import moment from "moment-timezone";
 
 // currentDay and forecast props to check if item selected for daily or forecast view
-// saved prop to check if item viewed in saved tab to hide "Save city" button
-const CurrentWeather = ({ weather, currentDay, forecast, saved }) => {
+const CurrentWeather = ({ weather, currentDay, forecast}) => {
   const dispatch = useDispatch();
   const weatherDescription = weather.weather[0].description;
   const savedCities = useSelector((state) => state.currentWeather.savedCities);
@@ -26,7 +25,7 @@ const CurrentWeather = ({ weather, currentDay, forecast, saved }) => {
   });
   const { vertical, horizontal, open } = alertState;
   const [isSuccess, setIsSuccess] = useState(true);
-  // successfull alert show and hide
+  // alert show and hide
   const handleClick = (newAlertState) => {
     setAlertState({ open: true, ...newAlertState });
   };
@@ -61,7 +60,8 @@ const CurrentWeather = ({ weather, currentDay, forecast, saved }) => {
   if (dayNumber === 4) weekDay = "Thursday";
   if (dayNumber === 5) weekDay = "Friday";
   if (dayNumber === 6) weekDay = "Saturday";
-
+// give sunrise and sunset their own data 
+// depends on if current day or forecast
   let sunrise;
   let sunset;
   if (forecast) {
@@ -113,13 +113,9 @@ const CurrentWeather = ({ weather, currentDay, forecast, saved }) => {
             <h1>{weather.main.temp.toFixed(1)}C°</h1>
           </Box>
           {currentDay && (
-            <Fragment>
-              {!saved && (
                 <Button variant='contained' fullWidth onClick={save}>
                   Save city
                 </Button>
-              )}
-            </Fragment>
           )}
         </Box>
       </Box>

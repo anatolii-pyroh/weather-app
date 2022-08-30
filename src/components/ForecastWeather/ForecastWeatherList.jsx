@@ -29,7 +29,6 @@ const ForecastWeatherList = () => {
                 weather={item}
                 currentDay={false}
                 forecast={forecastWeather}
-                saved={false}
               />
             </li>
           ))}

@@ -22,6 +22,7 @@ const SavedCitiesList = ({ setAlignment }) => {
     left: true,
   });
 
+  // close menu when user click on backdrop or select city
   const toggleDrawer = (anchor, open) => (event) => {
     if (
       event.type === "keydown" &&
@@ -33,6 +34,7 @@ const SavedCitiesList = ({ setAlignment }) => {
     setState({ ...state, [anchor]: open });
   };
 
+  // show city when click on it in list
   const showCityInfo = async (cityInfo) => {
     setAlignment("daily");
     const response = await getApi(cityInfo);
