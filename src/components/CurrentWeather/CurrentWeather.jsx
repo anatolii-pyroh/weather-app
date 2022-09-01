@@ -96,6 +96,11 @@ const CurrentWeather = ({ weather, currentDay, forecast }) => {
                 {weather?.name}, {weather?.sys?.country}
               </>
             )}
+            {forecast && (
+              <>
+                {forecast?.city?.name}, {forecast?.city?.country}
+              </>
+            )}
           </h3>
           <span>
             {weekDay}, {date}
