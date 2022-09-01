@@ -1,4 +1,4 @@
-import React, { Fragment, useState, useEffect } from "react";
+import React, { Fragment, useState, useEffect, useMemo } from "react";
 import { Box, Button, Snackbar } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { saveCity } from "../../redux/reducers/currentWeatherSlice";
@@ -11,9 +11,10 @@ import WbTwilightIcon from "@mui/icons-material/WbTwilight";
 import MyLocationIcon from "@mui/icons-material/MyLocation";
 import AirIcon from "@mui/icons-material/Air";
 import moment from "moment-timezone";
+import { days } from "../../utils/getDay";
 
 // currentDay and forecast props to check if item selected for daily or forecast view
-const CurrentWeather = ({ weather, currentDay, forecast}) => {
+const CurrentWeather = ({ weather, currentDay, forecast }) => {
   const dispatch = useDispatch();
   const weatherDescription = weather.weather[0].description;
   const savedCities = useSelector((state) => state.currentWeather.savedCities);
@@ -25,13 +26,17 @@ const CurrentWeather = ({ weather, currentDay, forecast}) => {
   });
   const { vertical, horizontal, open } = alertState;
   const [isSuccess, setIsSuccess] = useState(true);
-  // alert show and hide
+  const date = new Date(weather.dt * 1000).toLocaleDateString("en-GB");
+  const dayNumber = new Date(weather.dt * 1000).getDay();
+  const weekDay = days[dayNumber];
+
   const handleClick = (newAlertState) => {
     setAlertState({ open: true, ...newAlertState });
   };
   const handleClose = () => {
     setAlertState({ ...alertState, open: false });
   };
+
   // function to save city or decline if already saved
   const save = () => {
     const check = savedCities.findIndex((item) => item.id === weather.id);
@@ -50,39 +55,34 @@ const CurrentWeather = ({ weather, currentDay, forecast}) => {
       dispatch(saveCity(weather));
     }
   };
-  // const time = new Date(weather.dt * 1000).toLocaleTimeString("it-IT");
-  const date = new Date(weather.dt * 1000).toLocaleDateString("en-GB");
-  const dayNumber = new Date(weather.dt * 1000).getDay();
-  let weekDay = "Sunday";
-  if (dayNumber === 1) weekDay = "Monday";
-  if (dayNumber === 2) weekDay = "Tuesday";
-  if (dayNumber === 3) weekDay = "Wednesday";
-  if (dayNumber === 4) weekDay = "Thursday";
-  if (dayNumber === 5) weekDay = "Friday";
-  if (dayNumber === 6) weekDay = "Saturday";
-// give sunrise and sunset their own data 
-// depends on if current day or forecast
-  let sunrise;
-  let sunset;
-  if (forecast) {
-    sunrise = moment
-      .utc(forecast?.city?.sunrise, "X")
-      .add(forecast?.city?.timezone, "seconds")
-      .format("HH:mm");
-    sunset = moment
-      .utc(forecast?.city?.sunset, "X")
-      .add(forecast?.city?.timezone, "seconds")
-      .format("HH:mm");
-  } else {
-    sunrise = moment
-      .utc(weather?.sys?.sunrise, "X")
-      .add(weather?.timezone, "seconds")
-      .format("HH:mm");
-    sunset = moment
-      .utc(weather?.sys?.sunset, "X")
-      .add(weather?.timezone, "seconds")
-      .format("HH:mm");
-  }
+
+  // give sunrise and sunset their own data
+  // depends on if current day or forecast
+  const sunTime = useMemo(() => {
+    if (forecast) {
+      const forecastSun = { sunrise: null, sunset: null };
+      forecastSun.sunrise = moment
+        .utc(forecast?.city?.sunrise, "X")
+        .add(forecast?.city?.timezone, "seconds")
+        .format("HH:mm");
+      forecastSun.sunset = moment
+        .utc(forecast?.city?.sunset, "X")
+        .add(forecast?.city?.timezone, "seconds")
+        .format("HH:mm");
+      return forecastSun;
+    } else {
+      const currentSun = { sunrise: null, sunset: null };
+      currentSun.sunrise = moment
+        .utc(weather?.sys?.sunrise, "X")
+        .add(weather?.timezone, "seconds")
+        .format("HH:mm");
+      currentSun.sunset = moment
+        .utc(weather?.sys?.sunset, "X")
+        .add(weather?.timezone, "seconds")
+        .format("HH:mm");
+      return currentSun;
+    }
+  }, [weather, forecast]);
 
   return (
     // whole currentweather block
@@ -113,9 +113,9 @@ const CurrentWeather = ({ weather, currentDay, forecast}) => {
             <h1>{weather.main.temp.toFixed(1)}C°</h1>
           </Box>
           {currentDay && (
-                <Button variant='contained' fullWidth onClick={save}>
-                  Save city
-                </Button>
+            <Button variant='contained' fullWidth onClick={save}>
+              Save city
+            </Button>
           )}
         </Box>
       </Box>
@@ -133,7 +133,7 @@ const CurrentWeather = ({ weather, currentDay, forecast}) => {
           </Box>
           <Box className={classes["desctiption-icon-with-text"]}>
             <WbSunnyIcon sx={{ mr: 1 }} />
-            <span>Sunrise: {sunrise}</span>
+            <span>Sunrise: {sunTime.sunrise}</span>
           </Box>
           <Box className={classes["desctiption-icon-with-text"]}>
             <MyLocationIcon sx={{ mr: 1 }} />
@@ -153,7 +153,7 @@ const CurrentWeather = ({ weather, currentDay, forecast}) => {
           </Box>
           <Box className={classes["desctiption-icon-with-text"]}>
             <WbTwilightIcon sx={{ mr: 1 }} />
-            <span>Sunset: {sunset}</span>
+            <span>Sunset: {sunTime.sunset}</span>
           </Box>
           <Box className={classes["desctiption-icon-with-text"]}>
             <AirIcon sx={{ mr: 1 }} />
